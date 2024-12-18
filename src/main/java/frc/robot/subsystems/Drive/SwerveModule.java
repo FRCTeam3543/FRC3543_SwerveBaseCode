@@ -13,6 +13,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.math.OnboardModuleState;
 import frc.lib.util.CANSparkMaxUtil;
@@ -20,7 +21,7 @@ import frc.lib.util.SwerveModuleConstants;
 import frc.lib.util.CANSparkMaxUtil.Usage;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drive.Encoders.ModuleEncoder;
-import frc.robot.subsystems.Drive.Encoders.ModuleEncoderThrifty;
+import frc.robot.subsystems.Drive.Encoders.AbsoluteEncoders;
 
 public class SwerveModule {
   /* Module details */
@@ -34,7 +35,6 @@ public class SwerveModule {
   private RelativeEncoder driveEncoder;
   private RelativeEncoder integratedAngleEncoder;
   private ModuleEncoder angleEncoder;
-  
   private double lastAngle;
 
   /* Controllers */
@@ -59,7 +59,7 @@ public class SwerveModule {
     this.drivePIDController = new PIDController(drivePID[0], drivePID[1], drivePID[2]);
 
     /* Angle Encoder Config */
-   angleEncoder = new ModuleEncoderThrifty(moduleConstants.cancoderID);
+    angleEncoder = new AbsoluteEncoders(moduleConstants.cancoderID);
     angleEncoder.setOffset(Rotation2d.fromDegrees(moduleConstants.angleOffset));
 
     /* Angle Motor Config */
@@ -105,7 +105,7 @@ public class SwerveModule {
     CANSparkMaxUtil.setCANSparkMaxBusUsage(angleMotor, Usage.kPositionOnly);
     angleMotor.setSmartCurrentLimit(30, 30);
     angleMotor.setInverted(true);
-    angleMotor.setIdleMode(IdleMode.kCoast);
+    angleMotor.setIdleMode(IdleMode.kBrake);
     integratedAngleEncoder.setPositionConversionFactor(Constants.SwerveConstants.angleConversionFactor);
     angleController.setP(anglePID[0]);
     angleController.setI(anglePID[1]);
@@ -124,7 +124,7 @@ public class SwerveModule {
     } else {
       driveMotor.setInverted(false);
     }
-    driveMotor.setIdleMode(IdleMode.kCoast);
+    driveMotor.setIdleMode(IdleMode.kBrake);
     driveEncoder.setVelocityConversionFactor(Constants.SwerveConstants.driveConversionVelocityFactor);
     driveEncoder.setPositionConversionFactor(Constants.SwerveConstants.driveConversionPositionFactor);
     driveController.setP(drivePID[0]);
@@ -139,11 +139,11 @@ public class SwerveModule {
   private void setSpeed(SwerveModuleState desiredState) {
     driveSetpoint = desiredState.speedMetersPerSecond;
 
-    driveController.setReference(
-    desiredState.speedMetersPerSecond,
-    ControlType.kVelocity,
-    0,
-    feedforward.calculate(desiredState.speedMetersPerSecond));
+    // driveController.setReference(
+    // desiredState.speedMetersPerSecond,
+    // ControlType.kVelocity,
+    // 0,
+    // feedforward.calculate(desiredState.speedMetersPerSecond));
   }
 
   private void setAngle(SwerveModuleState desiredState) {
@@ -158,7 +158,13 @@ public class SwerveModule {
   }
 
   public void logValues() {
-    
+    SmartDashboard.putNumber(Constants.SwerveConstants.moduleNames[moduleNumber] + " Desired Speed", driveSetpoint);
+    SmartDashboard.putNumber(Constants.SwerveConstants.moduleNames[moduleNumber] + " Actual Speed", this.getSpeed());
+
+    SmartDashboard.putNumber(Constants.SwerveConstants.moduleNames[moduleNumber] + " Desired Angle",
+        angleSetpoint % 360);
+    SmartDashboard.putNumber(Constants.SwerveConstants.moduleNames[moduleNumber] + " Actual Angle",
+        angleEncoder.getAbsolutePosition().getDegrees());
   }
 
   public void goToHome() {
@@ -209,12 +215,5 @@ public class SwerveModule {
     driveController.setReference((pidOutput / Constants.SwerveConstants.maxSpeed)
         * 12 + ffOutput,
         ControlType.kVoltage);
-        SmartDashboard.putNumber(Constants.SwerveConstants.moduleNames[moduleNumber] + " Desired Speed", driveSetpoint);
-    SmartDashboard.putNumber(Constants.SwerveConstants.moduleNames[moduleNumber] + " Actual Speed", this.getSpeed());
-
-    SmartDashboard.putNumber(Constants.SwerveConstants.moduleNames[moduleNumber] + " Desired Angle",
-        angleSetpoint % 360);
-    SmartDashboard.putNumber(Constants.SwerveConstants.moduleNames[moduleNumber] + " Actual Angle",
-        angleEncoder.getAbsolutePosition().getDegrees());
   }
 }

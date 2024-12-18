@@ -11,42 +11,36 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.RobotMode;
 import frc.robot.commands.Drive.TeleopSwerve;
 import frc.robot.subsystems.Drive.Swerve;
-import frc.robot.subsystems.Lights.Lights;
-import frc.robot.commands.Lights.SolidColor;
 
 
 public class RobotContainer {
 
-  private RobotMode robotMode = RobotMode.DISABLED;
   /* Controllers */
-  private final CommandXboxController driver = new CommandXboxController(Constants.Operators.driver);
+  private final CommandXboxController driver = new CommandXboxController(Constants.driverControllers.driver);
   private SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   /* Subsystems */
   final Swerve s_Swerve = new Swerve();
- final Lights lights = new Lights();
+ 
 
   public RobotContainer() {
     configureButtonBindings();
 
   }
 
-  public void setRobotMode(RobotMode mode) {
-    robotMode = mode;
-  }
 
   public void disabledActions() {
 
   }
 
   public void teleopInit() {
-    lights.clearBuffer();
+   
    
 
   }
 
   public void disabledInit() {
-    new SolidColor(lights, Constants.LightsConstants.Colors.GREEN);
+   
      
   }
 

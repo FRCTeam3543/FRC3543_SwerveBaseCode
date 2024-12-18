@@ -15,32 +15,9 @@ public final class Constants {
     DISABLED
   }
 
-  public static class LightsConstants {
-    public static int port = 0;
-    public static int length = 12;
-
-    public static enum LightsType {
-      ENDGAME,
-      CLIMB,
-      SHOOTING,
-      INTAKE,
-      IDLE,
-      DISABLED
-    }
-
-    public static class Colors {
-      public static int[] RED = new int[] { 255, 0, 0 };
-      public static int[] GREEN = new int[] { 0, 255, 0 };
-      public static int[] BLUE = new int[] { 0, 0, 255 };
-      public static int[] GOLD = new int[] { 175, 184, 6 };
-      public static int[] MAGENTA = new int[] { 255, 0, 255 };
-      public static int[] BRIGHT = new int[] { 234, 255, 48 };
-    }
-  }
-
   public static boolean enableTunableValues = true;
 
-  public static final class Operators {
+  public static final class driverControllers {
     public static final int driver = 0;
     public static final int operator = 1;
   }
@@ -66,7 +43,7 @@ public final class Constants {
     /* Drivetrain Constants */
     public static final double trackWidth = Units.inchesToMeters(21.75);
     public static final double wheelBase = Units.inchesToMeters(21.75);
-    public static final double wheelDiameter = Units.inchesToMeters(4.0); // TODO: measure
+    public static final double wheelDiameter = Units.inchesToMeters(4.0); 
     public static final double wheelCircumference = wheelDiameter * Math.PI;
 
     public static final double driveGearRatio = (6.75 / 1.0); // 6.75:1
@@ -88,23 +65,20 @@ public final class Constants {
     public static final double maxSpeed = 4.2; // meters per second
     public static final double maxAngularVelocity = Math.PI * 2; // rads per second
 
-    /* Neutral Modes */
-    /* Angle Encoder Invert */
-
-    /* Module Specific Constants */
-    public static final String[] moduleNames = { "Front Left", "Front Right", "Back Left", "Back Right" }; // module #0,
+  
+    public static final String[] moduleNames = { "Front Left", "Front Right", "Back Left", "Back Right" }; 
     // #1, #2, #3
 
-    public static final double[] driveSVA = new double[] { 0.3, 1.889, 0.0 };
-    public static final double[] drivePID = new double[] { 0.15, 0.0000, 0.0007 };
-    public static final double[] anglePID = new double[] { 0.02, 0.0, 0.0007 };
+    public static final double[] driveSVA = new double[] { 0.3, 2.5, 0.0 };
+    public static final double[] drivePID = new double[] { 0.15, 0.0000, 0.00010 };
+    public static final double[] anglePID = new double[] { 0.02, 0.0, 0.0005 };
 
     /* Front Left Module - Module 0 */
     public static final class Mod0 {
       public static final int driveMotorID = 1;
       public static final int angleMotorID = 2;
       public static final int canCoderID = 0;
-      public static final double angleOffset = 18.85;
+      public static final double angleOffset = 0;
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
           canCoderID, angleOffset, anglePID, drivePID, driveSVA);
     }
@@ -114,7 +88,7 @@ public final class Constants {
       public static final int driveMotorID = 4;
       public static final int angleMotorID = 3;
       public static final int canCoderID = 1;
-      public static final double angleOffset = 18.85;
+      public static final double angleOffset = 0 ;
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
           canCoderID, angleOffset, anglePID, drivePID, driveSVA);
     }
@@ -124,7 +98,7 @@ public final class Constants {
       public static final int driveMotorID = 5;
       public static final int angleMotorID = 6;
       public static final int canCoderID = 2;
-      public static final double angleOffset = 18.5;
+      public static final double angleOffset = 0;
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
           canCoderID, angleOffset, anglePID, drivePID, driveSVA);
     }
@@ -134,7 +108,7 @@ public final class Constants {
       public static final int driveMotorID = 8;
       public static final int angleMotorID = 7;
       public static final int canCoderID = 3;
-      public static final double angleOffset = 18.4;
+      public static final double angleOffset = 0;
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
           canCoderID, angleOffset, anglePID, drivePID, driveSVA);
     }
